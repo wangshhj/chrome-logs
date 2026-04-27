@@ -1,0 +1,115 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+.title {
+  font-weight: 700;
+  color: #222;
+}
+.stat {
+  margin-left: auto;
+  color: #444;
+}
+button {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background: #f7f7f7;
+}
+.btn-active {
+  background: #1677ff;
+  border-color: #1677ff;
+  color: #fff;
+}
+.btn-active:hover {
+  background: #0958d9;
+  border-color: #0958d9;
+}
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+.control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: flex-end;
+}
+.form-group {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group.actions {
+  flex-direction: row;
+  align-items: end;
+  gap: 8px;
+}
+label {
+  font-weight: 700;
+  font-size: 12px;
+  color: #333;
+}
+input {
+  padding: 7px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 220px;
+}
+.err {
+  padding: 10px 12px;
+  background: #fff1f0;
+  border-bottom: 1px solid #ffd6d6;
+  color: #a8071a;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  white-space: pre-wrap;
+}
+#tableContainer {
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+#logTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+#logTable th, #logTable td {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  font-size: 12px;
+}
+#logTable th {
+  background: #fafafa;
+  font-weight: 700;
+  color: #222;
+}
+#logTable td {
+  word-break: break-word;
+}
+.value-hit {
+  color: #cf1322;
+  font-weight: 600;
+}
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+

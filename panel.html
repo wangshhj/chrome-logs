@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Logs Analyzer</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <div class="bar">
+      <div class="title">/logs 日志分析</div>
+      <div class="stat">
+        <span>已收集 logs 条数：</span>
+        <span id="total">0</span>
+      </div>
+      <button id="btnClear">清空</button>
+      <button id="btnExport">导出 JSON</button>
+    </div>
+
+    <div id="err" class="err" style="display:none;"></div>
+
+    <div class="controls">
+      <div class="control-row">
+        <div class="form-group">
+          <label for="fieldName">从对象字段</label>
+          <input type="text" id="fieldName" placeholder="例如: price" value="price" />
+        </div>
+
+        <div class="form-group">
+          <label for="rowId">从对象rowId（可选）</label>
+          <input type="text" id="rowId" placeholder="" />
+        </div>
+
+        <div class="form-group">
+          <label for="productId">product_id（可选）</label>
+          <input type="text" id="productId" placeholder="" />
+        </div>
+
+        <div class="form-group actions">
+          <label>&nbsp;</label>
+          <button id="btnSearch">搜索从对象</button>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <div class="form-group">
+          <label for="masterFieldName">主对象字段</label>
+          <input type="text" id="masterFieldName" placeholder="例如: name, status" />
+        </div>
+
+        <div class="form-group actions">
+          <label>&nbsp;</label>
+          <button id="btnSearchMaster">搜索主对象</button>
+          <button id="btnFilterSupported">筛选计算接口</button>
+          <button id="btnResetFilter">重置</button>
+          <button id="btnClearTable">清空表格</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="tableContainer">
+      <table id="logTable">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>字段名</th>
+            <th>字段值</th>
+            <th>主对象字段</th>
+            <th>主对象字段值</th>
+            <th>接口URL</th>
+            <th>接口描述</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="7" class="no-data">请输入搜索条件并点击搜索按钮</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="api-desc-config.js"></script>
+    <script src="log-logic.js"></script>
+    <script src="panel.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Logs Analyzer (/logs?)",
+  "version": "0.1.0",
+  "description": "在 DevTools 中抓取 /logs? 响应，解析 data.logs 并进行分析展示。",
+  "minimum_chrome_version": "114",
+  "devtools_page": "devtools.html",
+  "permissions": []
+}
+
