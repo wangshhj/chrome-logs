@@ -156,7 +156,6 @@ function findLogs(logData, fieldName, rowId, productId) {
 
     // 没有 url/uri 的日志：直接在 msg 中判断是否包含筛选字段，若有则返回字段值
     if (!uri) {
-      if (hasRowIdFilter || hasProductIdFilter) return;
       const msg = log && log.msg;
       if (msg && String(msg).includes(fieldName)) {
         const extracted = extractFieldValueFromMsg(msg, fieldName);
@@ -167,13 +166,14 @@ function findLogs(logData, fieldName, rowId, productId) {
           url: null,
           log
         });
+      } else {
+        results.push({ time, fieldName, fieldValue: '无', url: null, log: null });
       }
       return;
     }
 
     // 非目标接口：只输出调用时间
     if (uri && !matchesApiType(uri, SUPPORTED_APIS)) {
-      if (hasRowIdFilter || hasProductIdFilter) return;
       results.push({ time, fieldName, fieldValue: '无', url, log: null });
       return;
     }
@@ -181,7 +181,6 @@ function findLogs(logData, fieldName, rowId, productId) {
     const { body } = parseLogEntry(log);
     // 指定解析接口：即使没有 body/没命中 fieldName，也输出调用时间
     if (!body) {
-      if (hasRowIdFilter || hasProductIdFilter) return;
       results.push({ time, fieldName, fieldValue: '无', url, log: null });
       return;
     }
@@ -304,7 +303,6 @@ function findLogs(logData, fieldName, rowId, productId) {
     }
 
     if (results.length === resultsBefore) {
-      if (hasRowIdFilter || hasProductIdFilter) return;
       results.push({ time, fieldName, fieldValue: '无', url, log: null });
     }
   });
