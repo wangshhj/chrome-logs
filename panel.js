@@ -97,7 +97,8 @@ function renderTable(data, masterFieldName) {
     row.appendChild(fieldNameCell);
 
     const fieldValueCell = document.createElement('td');
-    const fieldValueText = (item.fieldValue !== null && item.fieldValue !== undefined) ? String(item.fieldValue) : '无';
+    const hasFieldValue = Object.prototype.hasOwnProperty.call(item || {}, 'fieldValue') && item.fieldValue !== undefined;
+    const fieldValueText = hasFieldValue ? String(item.fieldValue) : '无';
     fieldValueCell.textContent = fieldValueText;
     if (fieldValueText && fieldValueText !== '无') {
       fieldValueCell.classList.add('value-hit');

@@ -124,6 +124,10 @@ function matchesApiType(uri, apiTypes) {
   return apiTypes.some((type) => uri.includes(type));
 }
 
+function hasOwnField(obj, key) {
+  return !!obj && typeof obj === 'object' && Object.prototype.hasOwnProperty.call(obj, key);
+}
+
 function findLogs(logData, fieldName, rowId, productId) {
   if (!logData || !Array.isArray(logData)) return [];
 
@@ -132,6 +136,7 @@ function findLogs(logData, fieldName, rowId, productId) {
   const normalizedRowId = hasRowIdFilter ? String(rowId).trim() : '';
   const hasProductIdFilter = productId !== undefined && productId !== null && String(productId).trim() !== '';
   const normalizedProductId = hasProductIdFilter ? String(productId).trim() : '';
+  const noMatchFieldValue = (hasRowIdFilter || hasProductIdFilter) ? '数据不存在' : '无';
   const isRowMatched = (itemRowId, fallbackId) => {
     if (!hasRowIdFilter) return true;
     if (itemRowId !== undefined && itemRowId !== null && String(itemRowId) === normalizedRowId) return true;
@@ -162,26 +167,26 @@ function findLogs(logData, fieldName, rowId, productId) {
         results.push({
           time,
           fieldName,
-          fieldValue: extracted != null ? extracted : '无',
+          fieldValue: extracted != null ? extracted : noMatchFieldValue,
           url: null,
           log
         });
       } else {
-        results.push({ time, fieldName, fieldValue: '无', url: null, log: null });
+        results.push({ time, fieldName, fieldValue: noMatchFieldValue, url: null, log: null });
       }
       return;
     }
 
     // 非目标接口：只输出调用时间
     if (uri && !matchesApiType(uri, SUPPORTED_APIS)) {
-      results.push({ time, fieldName, fieldValue: '无', url, log: null });
+      results.push({ time, fieldName, fieldValue: noMatchFieldValue, url, log: null });
       return;
     }
 
     const { body } = parseLogEntry(log);
     // 指定解析接口：即使没有 body/没命中 fieldName，也输出调用时间
     if (!body) {
-      results.push({ time, fieldName, fieldValue: '无', url, log: null });
+      results.push({ time, fieldName, fieldValue: noMatchFieldValue, url, log: null });
       return;
     }
 
@@ -197,13 +202,13 @@ function findLogs(logData, fieldName, rowId, productId) {
             if (!item || typeof item !== 'object') continue;
             if (!isRowMatched(item.rowId, idKey)) continue;
             if (!isProductMatched(item)) continue;
-            if (item[fieldName] !== undefined) {
+            if (hasOwnField(item, fieldName)) {
               results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
             }
           }
         }
       }
-      if (body.masterData && body.masterData[fieldName] !== undefined) {
+      if (body.masterData && hasOwnField(body.masterData, fieldName)) {
         if (!hasRowIdFilter && (!hasProductIdFilter || isProductMatched(body.masterData))) {
           results.push({ time, fieldName, fieldValue: body.masterData[fieldName], url, log });
         }
@@ -218,19 +223,19 @@ function findLogs(logData, fieldName, rowId, productId) {
             if (!item || typeof item !== 'object') continue;
             if (!isRowMatched(item.rowId, idKey)) continue;
             if (!isProductMatched(item)) continue;
-            if (item[fieldName] !== undefined) {
+            if (hasOwnField(item, fieldName)) {
               results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
             }
           }
         }
       }
-      if (body.object_data && body.object_data[fieldName] !== undefined) {
+      if (body.object_data && hasOwnField(body.object_data, fieldName)) {
         if (!hasRowIdFilter && (!hasProductIdFilter || isProductMatched(body.object_data))) {
           results.push({ time, fieldName, fieldValue: body.object_data[fieldName], url, log });
         }
       }
     } else if (uri && uri.includes('price_policy/service/match')) {
-      if (body.masterData && body.masterData[fieldName] !== undefined) {
+      if (body.masterData && hasOwnField(body.masterData, fieldName)) {
         if (!hasRowIdFilter && (!hasProductIdFilter || isProductMatched(body.masterData))) {
           results.push({ time, fieldName, fieldValue: body.masterData[fieldName], url, log });
         }
@@ -240,11 +245,11 @@ function findLogs(logData, fieldName, rowId, productId) {
         for (const k1 in body.detailDataMap) {
           const v1 = body.detailDataMap[k1];
           if (!v1 || typeof v1 !== 'object') continue;
-          const looksLikeItem = (v1.rowId !== undefined) || (v1[fieldName] !== undefined);
+          const looksLikeItem = (v1.rowId !== undefined) || hasOwnField(v1, fieldName);
           if (looksLikeItem) {
             if (!isRowMatched(v1.rowId, k1)) continue;
             if (!isProductMatched(v1)) continue;
-            if (v1[fieldName] !== undefined) results.push({ time, fieldName, fieldValue: v1[fieldName], url, log });
+            if (hasOwnField(v1, fieldName)) results.push({ time, fieldName, fieldValue: v1[fieldName], url, log });
             continue;
           }
           for (const k2 in v1) {
@@ -252,7 +257,7 @@ function findLogs(logData, fieldName, rowId, productId) {
             if (!item || typeof item !== 'object') continue;
             if (!isRowMatched(item.rowId, k2)) continue;
             if (!isProductMatched(item)) continue;
-            if (item[fieldName] !== undefined) results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
+            if (hasOwnField(item, fieldName)) results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
           }
         }
       }
@@ -263,17 +268,17 @@ function findLogs(logData, fieldName, rowId, productId) {
             body.details[objName].forEach((item) => {
               if (!isRowMatched(item.rowId, undefined)) return;
               if (!isProductMatched(item)) return;
-              if (item[fieldName] !== undefined) results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
+              if (hasOwnField(item, fieldName)) results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
             });
           }
         }
       }
-      if (body.masterData && body.masterData[fieldName] !== undefined) {
+      if (body.masterData && hasOwnField(body.masterData, fieldName)) {
         if (!hasRowIdFilter && (!hasProductIdFilter || isProductMatched(body.masterData))) {
           results.push({ time, fieldName, fieldValue: body.masterData[fieldName], url, log });
         }
       }
-      if (body.object_data && body.object_data[fieldName] !== undefined) {
+      if (body.object_data && hasOwnField(body.object_data, fieldName)) {
         if (!hasRowIdFilter && (!hasProductIdFilter || isProductMatched(body.object_data))) {
           results.push({ time, fieldName, fieldValue: body.object_data[fieldName], url, log });
         }
@@ -285,17 +290,17 @@ function findLogs(logData, fieldName, rowId, productId) {
             body.details[objName].forEach((item) => {
               if (!isRowMatched(item.rowId, undefined)) return;
               if (!isProductMatched(item)) return;
-              if (item[fieldName] !== undefined) results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
+              if (hasOwnField(item, fieldName)) results.push({ time, fieldName, fieldValue: item[fieldName], url, log });
             });
           }
         }
       }
-      if (body.object_data && body.object_data[fieldName] !== undefined) {
+      if (body.object_data && hasOwnField(body.object_data, fieldName)) {
         if (!hasRowIdFilter && (!hasProductIdFilter || isProductMatched(body.object_data))) {
           results.push({ time, fieldName, fieldValue: body.object_data[fieldName], url, log });
         }
       }
-      if (body.masterData && body.masterData[fieldName] !== undefined) {
+      if (body.masterData && hasOwnField(body.masterData, fieldName)) {
         if (!hasRowIdFilter && (!hasProductIdFilter || isProductMatched(body.masterData))) {
           results.push({ time, fieldName, fieldValue: body.masterData[fieldName], url, log });
         }
@@ -303,7 +308,7 @@ function findLogs(logData, fieldName, rowId, productId) {
     }
 
     if (results.length === resultsBefore) {
-      results.push({ time, fieldName, fieldValue: '无', url, log: null });
+      results.push({ time, fieldName, fieldValue: noMatchFieldValue, url, log: null });
     }
   });
 
