@@ -96,10 +96,10 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         return;
       }
 
-      // 追加并广播
-      state.logs.push(...logs);
+      // 每次新的 /logs? 请求都覆盖旧缓存，只保留最新一批日志
+      state.logs = Array.isArray(logs) ? logs : [];
       broadcast('state', { total: state.logs.length });
-      broadcast('logs_batch', { logs });
+      broadcast('logs_batch', { logs: state.logs });
     });
   } catch (e) {
     broadcast('ingest_error', { url: null, error: String(e && e.message ? e.message : e) });

@@ -207,10 +207,8 @@ port.onMessage.addListener((msg) => {
 
   if (msg.type === 'logs_batch') {
     const batch = msg.payload && msg.payload.logs;
-    if (Array.isArray(batch) && batch.length) {
-      state.logs.push(...batch);
-      renderTotal();
-    }
+    state.logs = Array.isArray(batch) ? batch : [];
+    renderTotal();
     return;
   }
 
