@@ -15,5 +15,6 @@ const API_DESC_RULES = [
   { key: '/SalesOrderProductObj/controller/HistoryList', desc: '历史订单' },
   { key: '/mutipleUnit/service/calc', desc: '多单位计算' },
   { key: '/batch_query_bom_price', desc: 'BOM计算' },
+  { key: '/PluginList', desc: '插件初始化' },
 ];
 
