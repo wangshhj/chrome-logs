@@ -12,6 +12,7 @@ const API_DESC_RULES = [
   { key: 'price_policy/service/match', desc: '价格策略匹配' },
   { key: '/action/Clone', desc: '复制' },
   { key: '/QuoteObj/controller/List', desc: '历史报价' },
+  { key: '/SalesOrderProductObj/controller/HistoryList', desc: '历史订单' },
   { key: '/mutipleUnit/service/calc', desc: '多单位计算' },
   { key: '/batch_query_bom_price', desc: 'BOM计算' },
 ];

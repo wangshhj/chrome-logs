@@ -1,4 +1,4 @@
-// 纯前端日志分析核心：只依赖 logs 数组（来自 /logs? 响应中的 data.logs）
+// 纯前端日志分析核心：只依赖 logs 数组（来自 /api/log-explorer/search 的 rows，已转成日志对象）
 
 function getUriFromLog(log) {
   if (!log) return null;

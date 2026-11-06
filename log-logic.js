@@ -1,5 +1,5 @@
 // 从项目的 log.js 迁移而来：用于在插件面板内对 logs[] 做检索与解析
-// 数据源：/logs? 响应中的 { data: { logs: [] } }
+// 数据源：/api/log-explorer/search 的 rows 已在 devtools.js 转成 { msg, _time_second_, ... }
 
 // 支持“解析出分析结果”的接口类型（面板的“筛选计算接口”会用到）
 const SUPPORTED_APIS = ['/batchCalculate', '/TriggerEvent', '/action/Edit', '/action/Add', '/edit', '/Add', 'price_policy/service/match'];
